@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/make-request', 'RequestController@requestview');
+Route::get('/view-request', 'RequestController@viewrequest');
+Route::post('/send-request', 'RequestController@sendrequest');    
+Route::get('disapprove-request/{id}', 'RequestController@disapprove');
+Route::get('approve-request/{id}', 'RequestController@updatestatus');
+Route::get('fulfilled/{id}', 'RequestController@updatestatus');

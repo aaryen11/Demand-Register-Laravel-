@@ -40,6 +40,31 @@
                         </div>
 
                         <div class="form-group row">
+                        <label for="department" class="col-md-4 col-form-label text-md-right">{{ __('Department') }}</label>
+                            <div class="col-md-6">
+                                <select id="department" class=" form-control" name = 'department' required autofocus>
+                                    <option hidden disabled selected value></option>
+                                    <option value="X">X</option>
+                                    <option value="Y">Y</option>
+                                    <option value="Z">Z</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                        <label for="usertype" class="col-md-4 col-form-label text-md-right">{{ __('User Type') }}</label>
+                            <div class="col-md-6">
+                                <select id="usertype" class=" form-control" name = 'usertype' required autofocus>
+                                    <option hidden disabled selected value></option>
+                                    <option value="1">Faculty</option>
+                                    <option value="2">HOD</option>
+                                    <option value="3">Moderator</option>
+                                    <option value="4">Staff</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">

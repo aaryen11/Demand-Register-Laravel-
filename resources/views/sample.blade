@@ -1,0 +1,100 @@
+@extends('layouts.app')
+
+@section('content')
+
+<div class="row">
+<div class="col-sm-12">
+    <h1 class="display-3">Requests</h1>    
+  <table class="table table-striped">
+    <thead>
+        <tr>
+          <td>ID</td>
+          <td>Name</td>
+          <td>Made To</td>
+          <td>Requested Item</td>
+          <td>Approval Status</td>
+          <td>Request Made On</td>
+          <td colspan = 2>Actions</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($data as $d)
+        <tr>
+            <td>{{$d->id}}</td>
+            <td>{{$d->made_by}}</td>
+            <td>{{$d->made_to}}</td>
+            <td>{{$d->requested_item}}</td>
+            <td>{{$d->approval_status}}</td>
+            <td>{{$d->request_made_on}}</td>
+            
+
+            @if((Auth::user()->usertype) == '4')
+            <td>
+              <a href="/fulfilled-request" class="btn btn-primary">Fullfilled</a>
+            </td>
+            <td>
+                         <a href="{{ url('disapprove-request',$d->id) }}" class="btn btn-danger btn-sm"
+                           data-tr="tr_{{$d->id}}"
+                           data-toggle="confirmation"
+                           data-btn-ok-label="Delete" data-btn-ok-icon="fa fa-remove"
+                           data-btn-ok-class="btn btn-sm btn-danger"
+                           data-btn-cancel-label="Cancel"
+                           data-btn-cancel-icon="fa fa-chevron-circle-left"
+                           data-btn-cancel-class="btn btn-sm btn-default"
+                           data-title="Are you sure you want to delete ?"
+                           data-placement="left" data-singleton="true">
+                            Delete
+                        </a>
+              </td>
+            @elseif((Auth::user()->usertype) == '2' || (Auth::user()->usertype) == '3' || (Auth::user()->usertype) == '4')
+            <td>
+                <a href="/approve-request" class="btn btn-primary">Approve</a>
+                <a href="/disapprove-request" class="btn btn-danger">Disapprove</a>
+            </td>
+            @endif
+        </tr>
+        @endforeach
+    </tbody>
+  </table>
+<div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('[data-toggle=confirmation]').confirmation({
+            rootSelector: '[data-toggle=confirmation]',
+            onConfirm: function (event, element) {
+                element.trigger('confirm');
+            }
+        });
+
+
+        $(document).on('confirm', function (e) {
+            var ele = e.target;
+            e.preventDefault();
+
+
+            $.ajax({
+                url: ele.href,
+                type: 'DELETE',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                success: function (data) {
+                    if (data['success']) {
+                        $("#" + data['tr']).slideUp("slow");
+                        alert(data['success']);
+                    } else if (data['error']) {
+                        alert(data['error']);
+                    } else {
+                        alert('Whoops Something went wrong!!');
+                    }
+                },
+                error: function (data) {
+                    alert(data.responseText);
+                }
+            });
+
+
+            return false;
+        });
+    });
+</script>
+@endsection
